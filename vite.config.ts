@@ -15,5 +15,10 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
+    rollupOptions: {
+      output: {
+        chunkFileNames: 'assets/houwatch-[name]-[hash].js'
+      }
+    }
   },
 });
