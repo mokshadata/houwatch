@@ -66,6 +66,7 @@ const getAllVideos = async (handleResults) => {
           "Content-Type": "application/json",
           "Authorization": "Token 5NMJRmuC1OaOsoRmQJFY3K6LM407y0mq"
         },
+        mode: 'cors',
       })
       .then((res) => (res.json()))
       .then((resultsJSON) => {
@@ -84,7 +85,9 @@ async function getTranscript (video, { value, refreshing }) {
   if (!video.id) {
     return
   }
-  return await fetch('https://councilwatch.s3.us-east-2.amazonaws.com/transcripts/' + video.id + '.json')
+  return await fetch('https://councilwatch.s3.us-east-2.amazonaws.com/transcripts/' + video.id + '.json', {
+      mode: 'cors',
+    })
     .then((res) => res.json())
 }
 
