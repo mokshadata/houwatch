@@ -48,7 +48,7 @@ const indexItemsByPath = (path, transformItemFn, items) => (
 
 const sortIndexedItems = (path, items) => (Object.values(items).sort((item) => (item[path])))
 
-const sortVideos = sortIndexedItems.bind(this, 'recordingDate');
+const sortVideos = sortIndexedItems.bind(this, 'recordingDate')
 const indexVideos = indexItemsByPath.bind(this, 'ID', mapAirToJSON)
 const concatVideos = (allIndexed, results) => ({...allIndexed, ...indexVideos(results)})
 
@@ -103,8 +103,8 @@ export default function Home() {
   const [videoLastLoaded, setVideoLastLoaded] = createSignal(0)
   const [videoPlaybackSpeed, setPlaybackSpeed] = createSignal(1)
 
-  const [selectedParagraphIndex, setSelectedParagraphIndex] = createSignal(0)
-  const [selectedWordIndex, setSelectedWordIndex] = createSignal(0)
+  // const [selectedParagraphIndex, setSelectedParagraphIndex] = createSignal(0)
+  // const [selectedWordIndex, setSelectedWordIndex] = createSignal(0)
 
   const [activeMarkIndex, setActiveMarkIndex] = createSignal(0)
   const [totalMarks, setTotalMarks] = createSignal(0)
@@ -124,14 +124,14 @@ export default function Home() {
   const [currentTranscript, { mutate: mutateTranscript, refetch: refetchTranscript }] = createResource(currentVideo, getTranscript)
 
   const currentTranscriptByParagraphs = () => currentTranscript() && currentTranscript().transcript.paragraphs.map((para, paragraphIndex) => ({...para, paragraphIndex, words: currentTranscript().transcript.words.filter((word) => (word.start >= para.start && word.end <= para.end)) }))
-
-  const currentSelectedWord = () => currentTranscriptByParagraphs() && currentTranscriptByParagraphs()[selectedParagraphIndex()].words[selectedWordIndex()] || {}
+  // const currentSelectedWord = () => currentTranscriptByParagraphs() && currentTranscriptByParagraphs()[selectedParagraphIndex()]?.words[selectedWordIndex()] || {}
+  const [currentSelectedWord, setCurrentSelectedWord] = createSignal({})
 
   const handleVideoSelect = (video, clickEvent) => {
     clickEvent.preventDefault()
     setCurrentVideo(video)
-    setSelectedParagraphIndex(0)
-    setSelectedWordIndex(0)
+    // setSelectedParagraphIndex(0)
+    // setSelectedWordIndex(0)
 
     setVideoTime(0)
     setVideoDuration(0)
@@ -140,13 +140,14 @@ export default function Home() {
     setTotalMarks(0)
   }
 
-  const handleTranscriptClick = () => {
-    const selObj = window.getSelection();
-    const wordIndex = Math.floor((whichChild(selObj.anchorNode) + 1) / 2)
+  // const handleTranscriptClick = () => {
+  //   const selObj = window.getSelection()
+  //   const wordIndex = Math.floor((whichChild(selObj.anchorNode) + 1) / 2)
+  //   console.log(selObj, wordIndex, 'transcript click')
 
-    setSelectedParagraphIndex(selObj.anchorNode.parentNode.dataset.paragraphIndex)
-    setSelectedWordIndex(wordIndex)
-  }
+  //   setSelectedParagraphIndex(selObj.anchorNode.parentNode.dataset.paragraphIndex)
+  //   setSelectedWordIndex(wordIndex)
+  // }
 
   createEffect(() => {
     videoDOMEl.currentTime = currentSelectedWord().start || 0
@@ -162,6 +163,10 @@ export default function Home() {
   createEffect(() => {
     videoDOMEl.playbackRate = videoPlaybackSpeed()
   })
+
+  // createEffect(() => {
+  //   // console.log(selectedParagraphIndex(), selectedWordIndex(), currentSelectedWord())
+  // })
 
   createEffect(() => {
     console.log(searchText())
@@ -310,7 +315,7 @@ export default function Home() {
             <Show when={currentTranscriptByParagraphs()}>
               <article
                 class="h-full overflow-y-auto p-4 relative divide-y-2 bg-white border-2 border-slate-300 rounded-lg"
-                onDblClick={handleTranscriptClick}
+                // onDblClick={handleTranscriptClick}
                 ref={(el) => {
                   markInstance = new Mark(el)
                 }}
@@ -325,7 +330,10 @@ export default function Home() {
                         <p class="text-xs text-slate-500 font-mono">{formatSeconds(para.start)} - {formatSeconds(para.end)}</p>
                       </div>
                       <p class="h-full w-5/6" data-paragraph-index={para.paragraphIndex}>
-                        {para.words.map((word) => (<>{word.text} </>))}
+                        {para.words.map((word) => (<span onDblClick={()=> {
+                          // setSelectedWordIndex()
+                          setCurrentSelectedWord(word)
+                        }}>{word.text} </span>))}
                       </p>
                     </section>
                   )
