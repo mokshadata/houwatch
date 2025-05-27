@@ -5,7 +5,7 @@ import { createEffect } from 'solid-js';
 export default function Player(props) {
   const [ref, setRef] = createPlyr({ 
     source: props.source,
-    // options: props.option,
+    options: props.option,
   });
 
   createEffect(() => {
