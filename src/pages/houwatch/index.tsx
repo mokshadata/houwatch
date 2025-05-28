@@ -4,6 +4,7 @@ import TranscriptSearcher from '../../components/transcript-search'
 import TranscriptViewer from '../../components/transcript-viewer'
 import Playlist from '../../components/playlist'
 import VideoPlayer from '../../components/video-player'
+import PlayistSelector from '../../components/playlist-selector';
 
 import {
   setVideos,
@@ -19,10 +20,11 @@ export default function Home() {
 
   return (
     <div class="bg-gray-100 text-gray-700 p-8 h-[90vh]">
+      <PlayistSelector/>
       <div class="flex items-center space-x-2 h-full">
         <div class="h-full w-1/3">
           <VideoPlayer/>
-          <nav class="h-full overflow-y-auto border-2 border-slate-300 rounded-lg transition-[height]" style={videoHeight() && {height: `calc(100vh - ${videoHeight() + 20}px)`} || {}}>
+          <nav class="h-full overflow-y-auto border-2 border-slate-300 rounded-lg transition-[height]" style={videoHeight() && {height: `calc(100vh - ${videoHeight() + 60}px)`} || {}}>
             <Playlist/>
           </nav>
         </div>

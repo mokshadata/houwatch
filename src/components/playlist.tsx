@@ -1,9 +1,9 @@
 import { Suspense, For } from "solid-js"
 
 import {
-  sortedVideos,
   setCurrentVideo, currentVideo,
-  resetVideoDetails,
+  resetVideoDetails, sortedVideos,
+  playlist,
 } from "../data/simple";
 
 export default function Playlist() {
@@ -18,7 +18,7 @@ export default function Playlist() {
   return (
     <ul class="w-full flex flex-col divide-y-2">
       <Suspense>
-        <For each={sortedVideos()}>
+        <For each={playlist()}>
           {(video) => (
             <li
               classList={{

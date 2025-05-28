@@ -1,4 +1,4 @@
-import { createSignal, createMemo, createResource, } from "solid-js";
+import { createSignal, createMemo, createResource, createEffect} from "solid-js";
 
 export function formatSeconds(seconds) {
   // Calculate hours
@@ -21,9 +21,9 @@ export function formatSeconds(seconds) {
 const mapAirToJSON = (item) => ({
   "title": item["Title"],
   "tags": (item["Tags"] || []).map((tag) => (tag.value)),
-  "collection": item["Collection"],
+  "collections": (item["Collection"] || []).map((item) => item.value),
   "recordingDate": item['Recording Date'],
-  "source": (item.Source || {}).value,
+  "sources": (item["Organization"] || []).map((item) => item.value),
   "slug": item.Slug,
   "id": item.ID,
   "videoUrl": item['Video on AWS'],
@@ -109,6 +109,16 @@ export const [totalMarks, setTotalMarks] = createSignal(0)
 export const [searchText, setSearchText] = createSignal('')
 
 export const sortedVideos = createMemo(() => sortVideos(videos()))
+
+export const groupedVideos = createMemo(() => {
+  return Object.entries(sortedVideos().reduce((acc, curr) => ({...acc, ...Object.fromEntries(curr.collections.map((playlist) => [playlist, [...(acc[playlist] || []), curr]]))}), {}))
+    .map(([playlist, videos]) => ({ playlist, videos }))
+})
+
+export const [activePlaylist, setActivePlaylist] = createSignal('City Council 2025')
+
+export const playlist = () => (groupedVideos().find((lists) => (lists.playlist === activePlaylist()))?.videos || [])
+
 export const [currentVideo, setCurrentVideo] = createSignal({})
 export const [videoTime, setVideoTime] = createSignal(0)
 export const [videoDuration, setVideoDuration] = createSignal(0)
