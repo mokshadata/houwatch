@@ -18,16 +18,20 @@ export default function VideoPlayer() {
   createEffect(() => {
     videoDOMEl.currentTime = currentSelectedWord().start || 0
     videoDOMEl.play()
+
+    return currentSelectedWord()
   })
     
   createEffect(() => {
     if (videoLastLoaded() > 0) {
       setVideoHeight(videoDOMEl.videoHeight)
     }
+    return videoLastLoaded()
   })
 
   createEffect(() => {
     videoDOMEl.playbackRate = videoPlaybackSpeed()
+    return videoPlaybackSpeed()
   })
 
   return (

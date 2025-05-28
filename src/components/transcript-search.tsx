@@ -1,10 +1,57 @@
+import { createEffect } from 'solid-js';
+
+import Mark from 'mark.js'
+
 import {
   activeMarkIndex, setActiveMarkIndex,
   totalMarks, setTotalMarks,
   searchText, setSearchText,
+  currentTranscriptByParagraphs,
 } from '../data/simple';
 
-export default function TranscriptSearcher() {
+export default function TranscriptSearcher(props) {
+  let markInstance
+
+  createEffect(() => {
+    markInstance = new Mark(props.transcriptViewer())
+    return currentTranscriptByParagraphs()
+  }, null)
+
+  createEffect(() => {
+    markInstance?.unmark({
+      done: function(){
+        markInstance.mark(searchText(), {
+          separateWordSearch: true,
+          diacritics: true,
+          exclude: ['[role="complementary"]'],
+        });
+
+        const marks = document.querySelectorAll('mark')
+
+        setTotalMarks(marks.length)
+        marks[activeMarkIndex()]?.scrollIntoView({ 
+          behavior: 'smooth'
+        })
+
+        if (marks.length === 0) {
+          document.querySelector('article')?.scrollTo(0, 0)
+        }
+      }
+    })
+
+    return searchText()
+  })
+
+  createEffect(() => {
+    if ( activeMarkIndex() >= totalMarks() ) {
+      return
+    }
+    document.querySelectorAll('mark')[activeMarkIndex()]?.scrollIntoView({ 
+      behavior: 'smooth'
+    })
+
+    return activeMarkIndex()
+  })
 
 
   return (

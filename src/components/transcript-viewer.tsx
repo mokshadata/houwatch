@@ -1,50 +1,12 @@
-import { Suspense, Show, For, createEffect } from "solid-js"
-import Mark from "mark.js"
+import { Suspense, Show, For, } from "solid-js"
 
 import {
-  searchText, setTotalMarks, activeMarkIndex,
   currentTranscriptByParagraphs, setCurrentSelectedWord,
   formatSeconds,
-  totalMarks,
 } from "../data/simple"
 
 
-export default function TranscriptViewer() {
-  let markInstance
-
-  createEffect(() => {
-    console.log(searchText())
-    markInstance?.unmark({
-      done: function(){
-        markInstance.mark(searchText(), {
-          separateWordSearch: true,
-          diacritics: true,
-          exclude: ['[role="complementary"]'],
-        });
-
-        const marks = document.querySelectorAll('mark')
-
-        setTotalMarks(marks.length)
-        marks[activeMarkIndex()]?.scrollIntoView({ 
-          behavior: 'smooth'
-        })
-
-        if (marks.length === 0) {
-          document.querySelector('article')?.scrollTo(0, 0)
-        }
-      }
-    });
-  })
-
-  createEffect(() => {
-    if ( activeMarkIndex() >= totalMarks() ) {
-      return
-    }
-    document.querySelectorAll('mark')[activeMarkIndex()]?.scrollIntoView({ 
-      behavior: 'smooth'
-    })
-  })
-
+export default function TranscriptViewer(props) {
 
   return (
     <Suspense>
@@ -52,9 +14,7 @@ export default function TranscriptViewer() {
         <article
           class="h-full overflow-y-auto p-4 relative divide-y-2 bg-white border-2 border-slate-300 rounded-lg"
           // onDblClick={handleTranscriptClick}
-          ref={(el) => {
-            markInstance = new Mark(el);
-          }}
+          ref={props.ref}
         >
           <For each={currentTranscriptByParagraphs()}>
             {(para) => (
