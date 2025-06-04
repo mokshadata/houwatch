@@ -1,17 +1,17 @@
 import { Component, Show, Suspense } from 'solid-js';
 
-import TranscriptSearcher from '../../components/transcript-search'
-import TranscriptViewer from '../../components/transcript-viewer'
-import Playlist from '../../components/playlist'
-import VideoPlayer from '../../components/video-player'
-import PlayistSelector from '../../components/playlist-selector';
+import TranscriptSearcher from '../components/transcript-search'
+import TranscriptViewer from '../components/transcript-viewer'
+import Playlist from '../components/playlist'
+import VideoPlayer from '../components/video-player'
+import PlayistSelector from '../components/playlist-selector';
 
 import {
   setVideos,
   videoHeight,
   currentVideo,
   getAllVideos,
-} from '../../data/simple';
+} from '../data/simple';
 
 export default function Home() {
   getAllVideos(setVideos)
