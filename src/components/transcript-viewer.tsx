@@ -29,18 +29,17 @@ export default function TranscriptViewer(props) {
                   </p>
                 </div>
                 <p
-                  class="h-full w-5/6"
+                  class="h-full w-5/6 cursor-pointer"
                   data-paragraph-index={para.paragraphIndex}
                 >
                   {para.words.map((word) => (
                     <span
+                      class="hover:bg-sky-100 inline-block px-0.5"
                       onDblClick={() => {
                         // setSelectedWordIndex()
                         setCurrentSelectedWord(word);
                       }}
-                    >
-                      {word.text}{" "}
-                    </span>
+                    >{`${word.text}`}</span>
                   ))}
                 </p>
               </section>
