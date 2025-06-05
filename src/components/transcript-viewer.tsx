@@ -34,12 +34,12 @@ export default function TranscriptViewer(props) {
                 >
                   {para.words.map((word) => (
                     <span
-                      class="hover:bg-sky-100 inline-block px-0.5"
+                      class="hover:bg-sky-100 inline-block whitespace-pre-wrap"
                       onDblClick={() => {
                         // setSelectedWordIndex()
                         setCurrentSelectedWord(word);
                       }}
-                    >{`${word.text}`}</span>
+                    >{word.text}{" "}</span>
                   ))}
                 </p>
               </section>
