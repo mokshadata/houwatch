@@ -115,13 +115,16 @@ export const groupedVideos = createMemo(() => {
     .map(([playlist, videos]) => ({ playlist, videos }))
 })
 
-export const [activePlaylist, setActivePlaylist] = createSignal('City Council 2025')
+export const [activePlaylist, setActivePlaylist] = createSignal('City Council 2026')
 
 export const playlist = () => (groupedVideos().find((lists) => (lists.playlist === activePlaylist()))?.videos || [])
 
 export const [currentVideo, setCurrentVideo] = createSignal({})
 export const [videoTime, setVideoTime] = createSignal(0)
 export const [videoDuration, setVideoDuration] = createSignal(0)
+
+// export const [videoClipStart, setVideoClipStart] = createSignal(0)
+// export const [videoClipEnd, setVideoClipEnd] = createSignal(30)
 
 export const [currentTranscript, { mutate: mutateTranscript, refetch: refetchTranscript }] = createResource(currentVideo, getTranscript)
 
@@ -133,6 +136,9 @@ export function resetVideoDetails() {
   setVideoTime(0)
   setVideoDuration(0)
   setPlaybackSpeed(1)
+
+  // setVideoClipStart(0)
+  // setVideoClipEnd(30)
 
   setSearchText('')
   setActiveMarkIndex(0)
