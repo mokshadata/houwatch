@@ -201,6 +201,7 @@ export default function VideoPlayer() {
         </div>
       </Show>
       <Show when={videoDuration() > 0}>
+        <p>Video clipping feature is in testing.</p>
         <div class="flex flex-wrap border-2 border-slate-300 rounded-lg divide-x-2 mb-4">
           <button classList={{
             'px-2': true,
