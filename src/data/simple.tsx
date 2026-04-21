@@ -123,8 +123,8 @@ export const [currentVideo, setCurrentVideo] = createSignal({})
 export const [videoTime, setVideoTime] = createSignal(0)
 export const [videoDuration, setVideoDuration] = createSignal(0)
 
-// export const [videoClipStart, setVideoClipStart] = createSignal(0)
-// export const [videoClipEnd, setVideoClipEnd] = createSignal(30)
+export const [videoClipStart, setVideoClipStart] = createSignal(null)
+export const [videoClipEnd, setVideoClipEnd] = createSignal(null)
 
 export const [currentTranscript, { mutate: mutateTranscript, refetch: refetchTranscript }] = createResource(currentVideo, getTranscript)
 
