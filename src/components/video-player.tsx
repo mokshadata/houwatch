@@ -38,7 +38,12 @@ export default function VideoPlayer() {
   let videoDOMEl;
 
   async function trimVideo() {
-    const videoSource = new UrlSource(currentVideo().videoUrl);
+    const videoSource = new UrlSource(currentVideo().videoUrl, {
+      requestInit: {
+        method: 'GET',
+        mode: 'cors',  // Explicitly allowing CORS
+      },
+    });
 
     const input = new Input({
       formats: [MP4],
