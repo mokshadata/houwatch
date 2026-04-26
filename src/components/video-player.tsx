@@ -37,19 +37,48 @@ export default function VideoPlayer() {
 
   let videoDOMEl;
 
+  let videoSource;
+  let input;
+
+  createEffect(() => {
+
+    if (currentVideo() && currentVideo().videoUrl) {
+      videoSource = new UrlSource(currentVideo().videoUrl, {
+        requestInit: {
+          method: 'GET',
+          mode: 'cors',  // Explicitly allowing CORS
+        },
+      })
+
+      input = new Input({
+        formats: [MP4],
+        source: videoSource,
+      })
+
+      setVideoClipStart(null)
+      setVideoClipEnd(null)
+      setStartThumb('')
+      setEndThumb('')
+      // setClipProgress(0)
+    }
+
+    return currentVideo().videoUrl
+  })
+
+  createEffect(() => {
+    setOut('')
+    setClipProgress(0)
+
+    return videoClipStart()
+  })
+  createEffect(() => {
+    setOut('')
+    setClipProgress(0)
+
+    return videoClipEnd()
+  })
+
   async function trimVideo() {
-    const videoSource = new UrlSource(currentVideo().videoUrl, {
-      requestInit: {
-        method: 'GET',
-        mode: 'cors',  // Explicitly allowing CORS
-      },
-    });
-
-    const input = new Input({
-      formats: [MP4],
-      source: videoSource,
-    })
-
     const output = new Output({
       format: new Mp4OutputFormat(),
       target: new BufferTarget(),
@@ -84,13 +113,6 @@ export default function VideoPlayer() {
   }
 
   async function getThumbnail(timestamp, callback) {
-    const videoSource = new UrlSource(currentVideo().videoUrl);
-
-    const input = new Input({
-      formats: [MP4],
-      source: videoSource,
-    })
-
     const videoTrack = await input.getPrimaryVideoTrack()
 
     if (videoTrack) {
@@ -111,9 +133,9 @@ export default function VideoPlayer() {
   }
   const clipName = () => (`${currentVideo().slug}--clip--${new Date().toISOString().split('T')[0]}--${videoClipStart()}-${videoClipEnd()}.mp4`)
 
-  const canSetClipStart = () => ((videoClipEnd() && videoClipEnd() > videoTime()) || true)
+  const canSetClipStart = () => ((videoClipEnd() && videoClipEnd() > videoTime()) || videoTime() > 0)
   const canSetClipEnd = () => (videoClipStart() && videoTime() > videoClipStart())
-  const canMakeClip = () => (videoClipEnd() !== null && videoClipStart() !== null && (videoClipEnd() - videoClipStart() > 0))
+  const canMakeClip = () => (videoClipEnd() !== null && videoClipStart() !== null && (videoClipEnd() - videoClipStart() > 1))
 
   async function startClip() {
     setVideoClipStart(videoTime())
